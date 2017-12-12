@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css">
+<style>
+    .modal-content {
+        background-color: transparent;
+        box-shadow: none;
+        border:none;
+    }
+    .file-box{
+        width:200px;
+    }
+    .u-img {
+        width:100%;
+        vertical-align: middle;
+    }
+    .up-btn {
+        display:block;
+        position: absolute;
+        display: block;
+        width:200px;
+        /* width: 100%; */
+        height: 100%;
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+</style>
+</head>
+<body>
+        <form action="" role="form" class="form-horizontal enter1form">
+            <div class="row enter-uploader">
+                <div class="col-sm-6">
+                  <span><span style="color:red">*</span>照片：</span>
+                  <!-- <input type="hidden" id="btnid7" name="btnid7">
+                  <input type="hidden" id="btnfile7" name="btnfile7"> -->
+                  <input type="file" class="up-btn" id="u-btn1">
+                  
+                  <div class="file-box">
+                      <img id="file-img7" class="u-img" src="enter01.png" alt="">
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                    <img id="up-img" class="u-img">
+                </div>
+            </div> 
+        </form>
+        <h1>base64</h1>
+        <textarea  style="display: block; width: 100%;height: 30em;"></textarea>
+<!-- modal-loading-start -->
+    <div class="modal fade" id="loadModal">  
+        <div class="modal-dialog">   
+            <div class="modal-content">
+              <img class="center-block" alt="" src="data:image/gif;base64,R0lGODlhGQAZAJECAK7PTQBjpv///wAAACH/C05FVFNDQVBFMi4wAwEAAAAh/wtYTVAgRGF0YVhNUDw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo5OTYyNTQ4Ni02ZGVkLTI2NDUtODEwMy1kN2M4ODE4OWMxMTQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RUNGNUFGRUFGREFCMTFFM0FCNzVDRjQ1QzI4QjFBNjgiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RUNGNUFGRTlGREFCMTFFM0FCNzVDRjQ1QzI4QjFBNjgiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjk5NjI1NDg2LTZkZWQtMjY0NS04MTAzLWQ3Yzg4MTg5YzExNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5OTYyNTQ4Ni02ZGVkLTI2NDUtODEwMy1kN2M4ODE4OWMxMTQiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4B//79/Pv6+fj39vX08/Lx8O/u7ezr6uno5+bl5OPi4eDf3t3c29rZ2NfW1dTT0tHQz87NzMvKycjHxsXEw8LBwL++vby7urm4t7a1tLOysbCvrq2sq6qpqKempaSjoqGgn56dnJuamZiXlpWUk5KRkI+OjYyLiomIh4aFhIOCgYB/fn18e3p5eHd2dXRzcnFwb25tbGtqaWhnZmVkY2JhYF9eXVxbWllYV1ZVVFNSUVBPTk1MS0pJSEdGRURDQkFAPz49PDs6OTg3NjU0MzIxMC8uLSwrKikoJyYlJCMiISAfHh0cGxoZGBcWFRQTEhEQDw4NDAsKCQgHBgUEAwIBAAAh+QQFCgACACwAAAAAGQAZAAACTpSPqcu9AKMUodqLpAb0+rxFnWeBIUdixwmNqRm6JLzJ38raqsGiaUXT6EqO4uIHRAYQyiHw0GxCkc7l9FdlUqWGKPX64mbFXqzxjDYWAAAh+QQFCgACACwCAAIAFQAKAAACHYyPAsuNH1SbME1ajbwra854Edh5GyeeV0oCLFkAACH5BAUKAAIALA0AAgAKABUAAAIUjI+py+0PYxO0WoCz3rz7D4bi+BUAIfkEBQoAAgAsAgANABUACgAAAh2EjxLLjQ9UmzBNWo28K2vOeBHYeRsnnldKBixZAAA7" />  
+            </div>
+        </div>
+    </div>
+<!-- modal-loading-end -->
+</body>
+</html>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.js"></script>
+<script>
+// 图片压缩-start
+function run(input_file,get_data){
+    /*input_file：文件按钮对象*/
+    /*get_data: 转换成功后执行的方法*/
+    if ( typeof(FileReader) === 'undefined' ){
+        alert("抱歉，你的浏览器不支持 FileReader，不能将图片转换为Base64，请使用现代浏览器操作！");
+    } else {
+        try{
+            /*图片转Base64 核心代码*/
+            var file = input_file.files[0];
+            //这里我们判断下类型如果不是图片就返回 去掉就可以上传任意文件
+            if(!/image\/\w+/.test(file.type)){
+                alert("请确保文件为图像类型");
+                return false;
+            }
+            var reader = new FileReader();
+            reader.onload = function(){
+                get_data(this.result);
+            };
+            reader.readAsDataURL(file);
+        }catch (e){
+        }
+    }
+}
+// 图片压缩-end
+
+//modal垂直居中-start
+function centerModals() {
+    $('#loadModal').each(function(i) {
+        var $clone = $(this).clone().css('display','block').appendTo('body');
+        var top = Math.round(($clone.height() - $clone.find('.modal-content').height()) / 2);
+        top = top > 0 ? top : 0;
+        $clone.remove();
+        $(this).find('.modal-content').css("margin-top", top);
+    });
+}
+//modal垂直居中-end
+
+// 隐藏loading
+function hideModal(){  
+    $('#loadModal').modal('hide');  
+}  
+// 显示loading  
+function showModal(){  
+    $('#loadModal').on('show.bs.modal', centerModals);
+    $('#loadModal').modal({backdrop:'static',keyboard:false,show:true});  
+} 
+//modal垂直居中-end
+$(function(){
+    //页面大小变化是仍然保证模态框水平垂直居中
+    $(window).on('resize', centerModals);
+    //上传照片
+    $("#u-btn1").change(function () {
+        //转bese64
+        run(this, function (bs_img) {
+            $('#up-img').attr('src',bs_img);
+            $('textarea').val(bs_img);
+            console.log(bs_img);
+            showModal();
+            $.ajax({
+                type: "POST",
+                data:{base64_img:bs_img},
+                url: "",
+                dataType: "json",
+                beforeSend: function(){
+                    showModal();
+                },
+                success: function(data){
+                    if (data){
+                        hideModal();
+                    }else{
+                        hideModal();
+                    }
+                }
+            });
+        });
+    });
+})
+</script>
